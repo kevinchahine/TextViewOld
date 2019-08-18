@@ -33,3 +33,14 @@ add_library(
 	LineView.h
 	LineView.cpp
 )
+
+add_library(ASCII_LINES INTERFACE)
+
+target_include_directories(ASCII_LINES
+	INTERFACE "D:\\Documents\\Visual Studio 2019\\Projects\\C++\\ASCII\\ASCII")
+
+target_compile_definitions(ASCII_LINES
+	INTERFACE COOL_FEATURE=1
+		$<$<COMPILE_FEATURES:cxx_std_14>:HAVE_CXX11>)
+
+target_link_libraries(ASCII_LINES INTERFACE ASCII_LINES)

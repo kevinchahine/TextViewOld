@@ -2,7 +2,7 @@
 
 void Test_Mutation::basicLine()
 {
-	TextView<char> view(10, 15);
+	/*TextView<char> view(10, 15);
 
 	///Mutation<char> m;
 	///m.applyTo(view);
@@ -17,7 +17,7 @@ void Test_Mutation::basicLine()
 	HorizontalLineMutation<char> horLin(LineMutation<char>(2, 5, 7));
 	horLin.applyTo(view);
 
-	view.print();
+	view.print();*/
 }
 
 void Test_Mutation::boxDrawing()

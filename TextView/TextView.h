@@ -31,7 +31,7 @@
 //class Mutation<T>;
 
 template<typename T>
-class TextView : public View<T>
+class TextView : public View<ColoredChar<T>>
 {
 public:
 	TextView(size_t nRows, size_t nCols, const ColoredChar<T>& initializer);
@@ -42,12 +42,8 @@ public:
 
 	//void apply(Mutation * mutation);
 
-	virtual ColoredChar<T>& at(size_t row, size_t col);
-	virtual const ColoredChar<T>& at(size_t row, size_t col) const;
-
 	virtual void printInColorTo(std::ostream& os) const;
-	virtual void print(std::ostream& os = std::cout) const;
-
+	
 	friend std::ostream& operator<<(std::ostream& os, const TextView& view) {
 		os << '<' << view.getNRows() << ", " << view.getNCols() << "> = {";
 
@@ -60,117 +56,62 @@ public:
 		return os;
 	}
 
-protected:
-public:
-	// stores the characters to be displayed and their color
-	std::vector<ColoredChar<T>> vec;
 };
 
-template<typename T>
-TextView<T>::TextView(size_t nRows, size_t nCols, const ColoredChar<T>& initializer) :
-	View<T>(nRows, nCols),
-	vec(nRows * nCols, initializer)
-{
-}
-
-template<typename T>
-TextView<T>::TextView(size_t nRows, size_t nCols, const ColoredChar<T>&& initializer) :
-	View<T>(nRows, nCols),
-	vec(nRows * nCols, initializer)
-{
-}
-
-template<typename T>
-TextView<T>::TextView(const TextView& view) :
-	View<T>(view.nRows, view.nCols),
-	vec(view.vec)
-{}
-
-template<typename T>
-TextView<T>::TextView(const TextView&& view) :
-	View<T>(view.nRows, view.nCols),
-	vec(view.vec)
-{}
-
-template<typename T>
-TextView<T>::~TextView()
-{
-}
-
-template<typename T>
-ColoredChar<T>& TextView<T>::at(size_t row, size_t col)
-{
-	// Make sure row and column are in bounds
-	if (row >= nRows) {
-		std::cerr << __func__ << " row = " << row << " is out of bounds."
-			<< " nRows = " << this->nRows << std::endl;
-		// Don't throw an exception, 
-		// let vector exception handler deal with exceptions
-	}
-	if (col >= nCols) {
-		std::cerr << __func__ << " col = " << col << " is out of bounds."
-			<< "nCols = " << this->nCols << std::endl;
-		// Don't throw an exception, 
-		// let vector exception handler deal with exceptions
-	}
-
-	// At this point row and col are guarenteed to be inbounds
-	return this->vec.at(this->map(row, col));
-}
-
-template<typename T>
-const ColoredChar<T>& TextView<T>::at(size_t row, size_t col) const
-{
-	// Make sure row and column are in bounds
-	if (row >= nRows) {
-		std::cerr << __func__ << " row = " << row << " is out of bounds."
-			<< " nRows = " << this->nRows << std::endl;
-		// Don't throw an exception, 
-		// let vector exception handler deal with exceptions
-	}
-	if (col >= nCols) {
-		std::cerr << __func__ << " col = " << col << " is out of bounds."
-			<< "nCols = " << this->nCols << std::endl;
-		// Don't throw an exception, 
-		// let vector exception handler deal with exceptions
-	}
-
-	// At this point row and col are guarenteed to be inbounds
-	return this->vec.at(this->map(row, col));
-}
-
-template<typename T>
-void TextView<T>::printInColorTo(std::ostream& os) const
-{
-	//std::HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	
-	//CONSOLE_SCREEN_BUFFER_INFO info;
-	//if (!GetConsoleScreenBufferInfo(console, &info)) {
-	//	std::cerr << __func__ << " line " << __LINE__ << std::endl;
-	//	return false;
-	//}
-	
-	for (size_t row = 0; row < this->nRows; row++) {
-		//char startColor = info.wAttributes;
-		//char prevColor = startColor;
-
-		for (size_t col = 0; col < this->nCols; col++) {
-			os << this->vec[map(row, col)];
-		}
-		os << std::endl;
-	}
-	os << std::endl;
-}
-
-template<typename T>
-void TextView<T>::print(std::ostream& os) const
-{
-	for (size_t row = 0; row < this->nRows; row++) {
-		for (size_t col = 0; col < this->nCols; col++) {
-			os << this->vec[map(row, col)];
-		}
-		os << std::endl;
-	}
-	os << std::endl;
-}
+// ========================== CONSTRUCTORS ====================================
+//
+//template<typename T>
+//TextView<T>::TextView(
+//	size_t nRows, 
+//	size_t nCols, 
+//	const ColoredChar<T>& initializer) :
+//	View<ColoredChar<T>>(nRows, nCols, initializer)
+//{
+//}
+//
+//template<typename T>
+//TextView<T>::TextView(size_t nRows, size_t nCols, const ColoredChar<T>&& initializer) :
+//	View<ColoredChar<T>>(nRows, nCols, initializer)
+//{
+//}
+//
+//template<typename T>
+//TextView<T>::TextView(const TextView& view) :
+//	View<ColoredChar<T>>(view.nRows, view.nCols, view.vec)
+//{}
+//
+//template<typename T>
+//TextView<ColoredChar<T>>::TextView(const TextView&& view) :
+//	View<ColoredChar<T>>(view.nRows, view.nCols, view.vec)
+//{}
+//
+//template<typename T>
+//TextView<ColoredChar<T>>::~TextView()
+//{
+//}
+//
+//// ========================== PRINT ===========================================
+//
+//template<typename T>
+//void TextView<ColoredChar<T>>::printInColorTo(std::ostream& os) const
+//{
+//	//std::HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+//	
+//	//CONSOLE_SCREEN_BUFFER_INFO info;
+//	//if (!GetConsoleScreenBufferInfo(console, &info)) {
+//	//	std::cerr << __func__ << " line " << __LINE__ << std::endl;
+//	//	return false;
+//	//}
+//	
+//	for (size_t row = 0; row < this->nRows; row++) {
+//		//char startColor = info.wAttributes;
+//		//char prevColor = startColor;
+//
+//		for (size_t col = 0; col < this->nCols; col++) {
+//			os << this->vec[map(row, col)];
+//		}
+//		os << std::endl;
+//	}
+//	os << std::endl;
+//}
 

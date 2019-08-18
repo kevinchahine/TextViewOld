@@ -4,49 +4,19 @@
 #include <iomanip>
 
 #include "TextView.h"
+//#include "ASCII_Lines.h"
 
-template <typename T>
-class LineView : public TextView<T>
+class LineView : public View<char>
 {
 public:
-	LineView(
-		size_t nRows, 
-		size_t nCols, 
-		const ColoredChar<T>& initializer);
-
-	LineView(
-		size_t nRows, 
-		size_t nCols, 
-		const ColoredChar<T>&& initializer = ColoredChar<T>());
-
+	// ====================== CONSTRUCTORS ====================================
+	LineView(size_t nRows, size_t nCols, char initializer);
 	LineView(const LineView& view);
-	
 	LineView(const LineView&& view);
-	
-	LineView(const TextView<T>& view);
-	
-	LineView(const TextView<T>&& view);
-	
+	LineView(const View<char>& view);
+	LineView(const View<char>&& view);
 	~LineView();
+
+	virtual void print(std::ostream& os = std::cout) const;
+
 };
-
-template<typename T>
-LineView<T>::LineView(
-	size_t nRows, 
-	size_t nCols, 
-	const ColoredChar<T>& initializer) :
-	View<T>(nRows, nCols) {}
-
-template<typename T>
-LineView<T>::LineView(
-	size_t nRows,
-	size_t nCols,
-	const ColoredChar<T>&& initializer) :
-	TextView<T>(nRows, nCols, initializer) {}
-
-template<typename T>
-inline LineView<T>::~LineView()
-{
-}
-
-
