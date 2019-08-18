@@ -2,6 +2,7 @@
 
 void Test_LineView::constructors()
 {
-	///LineView<char> line;
+	LineView<char> line(10, 20);
 
+	line.print();
 }

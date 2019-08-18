@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <utility>
 
+#include "View.h"
+
 #include "ColoredChar.h"
 
 // class TextView: 
@@ -29,7 +31,7 @@
 //class Mutation<T>;
 
 template<typename T>
-class TextView
+class TextView : public View<T>
 {
 public:
 	TextView(size_t nRows, size_t nCols, const ColoredChar<T>& initializer);
@@ -40,14 +42,11 @@ public:
 
 	//void apply(Mutation * mutation);
 
-	size_t getNRows() const;
-	size_t getNCols() const;
+	virtual ColoredChar<T>& at(size_t row, size_t col);
+	virtual const ColoredChar<T>& at(size_t row, size_t col) const;
 
-	ColoredChar<T>& at(size_t row, size_t col);
-	const ColoredChar<T>& at(size_t row, size_t col) const;
-
-	void printInColorTo(std::ostream& os) const;
-	void print(std::ostream& os = std::cout) const;
+	virtual void printInColorTo(std::ostream& os) const;
+	virtual void print(std::ostream& os = std::cout) const;
 
 	friend std::ostream& operator<<(std::ostream& os, const TextView& view) {
 		os << '<' << view.getNRows() << ", " << view.getNCols() << "> = {";
@@ -63,79 +62,39 @@ public:
 
 protected:
 public:
-	// Takes the row and column coordinates of what would be a 2D array
-	// and maps them to a single value of a 1D array
-	// return row * this->nCols + col;
-	size_t map(size_t row, size_t col) const;
-	// Takes the coordinate of a 1D array and coverts it to the 
-	// row coordinate of what would be a 2D array
-	size_t getRow(size_t coord) const;
-	// Take the coordinate of a 1D array and converts it to the
-	// col coordinate of what would be a 2D arr
-	size_t getCol(size_t coord) const;
-
-protected:
-public:
-	// stores the number of rows in the view
-	size_t nRows;
-	// stores the number of cols in the view
-	size_t nCols;
 	// stores the characters to be displayed and their color
 	std::vector<ColoredChar<T>> vec;
 };
 
 template<typename T>
 TextView<T>::TextView(size_t nRows, size_t nCols, const ColoredChar<T>& initializer) :
-	nRows(nRows),
-	nCols(nCols),
-	vec(nRows* nCols, initializer)
+	View<T>(nRows, nCols),
+	vec(nRows * nCols, initializer)
 {
 }
 
 template<typename T>
 TextView<T>::TextView(size_t nRows, size_t nCols, const ColoredChar<T>&& initializer) :
-	nRows(nRows),
-	nCols(nCols),
-	vec(nRows* nCols, initializer)
+	View<T>(nRows, nCols),
+	vec(nRows * nCols, initializer)
 {
 }
 
 template<typename T>
 TextView<T>::TextView(const TextView& view) :
-	nRows(view.nRows),
-	nCols(view.nCols),
+	View<T>(view.nRows, view.nCols),
 	vec(view.vec)
 {}
 
 template<typename T>
 TextView<T>::TextView(const TextView&& view) :
-	nRows(view.nRows),
-	nCols(view.nCols),
+	View<T>(view.nRows, view.nCols),
 	vec(view.vec)
 {}
 
 template<typename T>
 TextView<T>::~TextView()
 {
-}
-
-//template<typename T>
-//inline void TextView<T>::apply(Mutation * mutation)
-//{
-//	std::cout << typeid(*mutation).raw_name() << std::endl;
-//	mutation->applyTo(static_cast<TextView<char>>(*this));
-//}
-
-template<typename T>
-inline size_t TextView<T>::getNRows() const
-{
-	return nRows;
-}
-
-template<typename T>
-inline size_t TextView<T>::getNCols() const
-{
-	return nCols;
 }
 
 template<typename T>
@@ -213,23 +172,5 @@ void TextView<T>::print(std::ostream& os) const
 		os << std::endl;
 	}
 	os << std::endl;
-}
-
-template<typename T>
-inline size_t TextView<T>::map(size_t row, size_t col) const
-{
-	return row * this->nCols + col;
-}
-
-template<typename T>
-inline size_t TextView<T>::getRow(size_t coord) const
-{
-	return coord / this->nCols;
-}
-
-template<typename T>
-inline size_t TextView<T>::getCol(size_t coord) const
-{
-	return coord % this->nCols;
 }
 

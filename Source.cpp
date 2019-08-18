@@ -8,8 +8,8 @@
 
 int main()
 {
-	Test_ColoredChar::test();
-	///Test_LineView::
+	///Test_ColoredChar::test();
+	Test_LineView::constructors();
 	///Test_Mutation::
 	///Test_TextView::
 	///Test_TextViewLayout::

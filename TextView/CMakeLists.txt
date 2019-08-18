@@ -24,6 +24,8 @@ add_library(
 	HorizontalLineMutation.cpp
 	
     # Views
+	View.h
+	View.cpp
 	TextView.h
 	TextView.cpp
 	TextViewLayout.h
